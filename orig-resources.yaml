@@ -1,0 +1,74 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: tanzu-java-web-app
+  namespace: tanzu-workload
+spec:
+  gitImplementation: go-git
+  ignore: |
+    !.git
+  interval: 1m0s
+  ref:
+    branch: main
+  timeout: 20s
+  url: https://github.com/kirtiapte/tanzu-java-web-app-demo.git
+status:
+  artifact:
+    checksum: 3245eedebe5af9014cb9197e5ec8b1b96d8ba1af
+    lastUpdateTime: "2022-05-27T07:37:09Z"
+    path: gitrepository/tanzu-workload/tanzu-java-web-app/f5cf96ef23f3fddba94616112dfad882882aabe4.tar.gz
+    revision: main/f5cf96ef23f3fddba94616112dfad882882aabe4
+    url: http://source-controller.flux-system.svc.cluster.local./gitrepository/tanzu-workload/tanzu-java-web-app/f5cf96ef23f3fddba94616112dfad882882aabe4.tar.gz
+  conditions:
+  - lastTransitionTime: "2022-05-27T07:37:09Z"
+    message: 'Fetched revision: main/f5cf96ef23f3fddba94616112dfad882882aabe4'
+    reason: GitOperationSucceed
+    status: "True"
+    type: Ready
+  observedGeneration: 1
+  url: http://source-controller.flux-system.svc.cluster.local./gitrepository/tanzu-workload/tanzu-java-web-app/latest.tar.gz
+---
+---
+apiVersion: kpack.io/v1alpha2
+kind: Image
+metadata:
+  name: tanzu-java-web-app
+  namespace: tanzu-workload
+spec:
+  build:
+    env:
+    - name: BP_OCI_SOURCE
+      value: f5cf96ef23f3fddba94616112dfad882882aabe4
+    resources: {}
+  builder:
+    kind: ClusterBuilder
+    name: default
+  cache:
+    volume:
+      size: 2G
+  failedBuildHistoryLimit: 10
+  imageTaggingStrategy: BuildNumber
+  serviceAccountName: default
+  source:
+    blob:
+      url: http://source-controller.flux-system.svc.cluster.local./gitrepository/tanzu-workload/tanzu-java-web-app/f5cf96ef23f3fddba94616112dfad882882aabe4.tar.gz
+  successBuildHistoryLimit: 10
+  tag: harbor.fbclouddemo.us/tap-packages/tanzu-java-web-app-tanzu-workload
+status:
+  buildCacheName: tanzu-java-web-app-cache
+  buildCounter: 1
+  conditions:
+  - lastTransitionTime: "2022-05-11T02:37:58Z"
+    status: "True"
+    type: Ready
+  - lastTransitionTime: "2022-05-11T02:37:58Z"
+    status: "True"
+    type: BuilderReady
+  latestBuildImageGeneration: 1
+  latestBuildReason: CONFIG
+  latestBuildRef: tanzu-java-web-app-build-1
+  latestImage: harbor.fbclouddemo.us/tap-packages/tanzu-java-web-app-tanzu-workload@sha256:a0211a199a42e031c37da1f9ae97c06bb612777b598cb95b547a93f683a2a997
+  latestStack: io.buildpacks.stacks.bionic
+  observedGeneration: 1
+---
