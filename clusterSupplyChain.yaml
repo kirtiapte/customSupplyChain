@@ -5,6 +5,20 @@ metadata:
   name: supply-chain
 spec:
   resources:
+    - name: source-provider
+      templateRef:
+        kind: ClusterSourceTemplate
+        name: source
+    - name: image-builder
+      templateRef:
+        kind: ClusterImageTemplate
+        name: source
+      params:
+        - name: image_prefix
+          value: 
+      sources:
+        - resource: source-provider
+          name: source
     - name: deploy
       templateRef:
         kind: ClusterTemplate
