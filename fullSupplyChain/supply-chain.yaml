@@ -23,10 +23,19 @@ spec:
         - name: source
           resource: source-provider
 
-    - name: deployer
+    - name: config-provider
       templateRef:
-        kind: ClusterTemplate
-        name: app-deploy
+        kind: ClusterConfigTemplate
+        name: app-config
       images:
         - name: image
           resource: image-builder
+
+
+    - name: git-writer
+      templateRef:
+        kind: ClusterTemplate
+        name: git-writer
+      configs:
+        - name: data
+          resource: config-provider
