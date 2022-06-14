@@ -10,9 +10,9 @@ spec:
     - name: git_branch
       default: main
     - name: git_user_name
-      default: gitops-user
+      default: kirtiapte
     - name: git_user_email
-      default: gitops-user@example.com
+      default: kirtiapte@yahoo.com
     - name: git_commit_message
       default: Update config
   template:
