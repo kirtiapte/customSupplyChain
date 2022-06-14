@@ -18,7 +18,7 @@ spec:
         name: image
       params:
         - name: image_prefix
-          value: index.docker.io/kirtiapte/example-gitwriter-sc-
+          value: harbor.fbclouddemo.us/tap-packages/example-gitwriter-sc-
       sources:
         - name: source
           resource: source-provider
