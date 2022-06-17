@@ -15,6 +15,7 @@ metadata:
   name: go-store
 spec:
   sources:
+    - image: gcr.io/paketo-buildpacks/java
     - image: gcr.io/paketo-buildpacks/go
 
 ---
@@ -38,7 +39,7 @@ spec:
   serviceAccountRef:
     name: cartographer-example-registry-creds-sa
     namespace: default
-  tag: index.docker.io/waciumawanjohi/example-gitwriter-sc-go-builder
+  tag: harbor.fbclouddemo.us/tap-packages/example-gitwriter-sc-go-builder
   stack:
     name: stack
     kind: ClusterStack
@@ -46,5 +47,7 @@ spec:
     name: go-store
     kind: ClusterStore
   order:
+    - group:
+        - id: paketo-buildpacks/java
     - group:
         - id: paketo-buildpacks/go
