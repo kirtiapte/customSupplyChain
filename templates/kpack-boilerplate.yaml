@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cartographer-example-registry-creds-sa
+secrets:
+  - name: registry-credentials
+imagePullSecrets:
+  - name: registry-credentials
+
+---
+apiVersion: kpack.io/v1alpha2
+kind: ClusterStore
+metadata:
+  name: go-store
+spec:
+  sources:
+    - image: gcr.io/paketo-buildpacks/java
+    - image: gcr.io/paketo-buildpacks/go
+
+---
+apiVersion: kpack.io/v1alpha2
+kind: ClusterStack
+metadata:
+  name: stack
+spec:
+  id: io.buildpacks.stacks.bionic
+  buildImage:
+    image: paketobuildpacks/build:base-cnb
+  runImage:
+    image: paketobuildpacks/run:base-cnb
+
+---
+apiVersion: kpack.io/v1alpha2
+kind: ClusterBuilder
+metadata:
+  name: go-builder
+spec:
+  serviceAccountRef:
+    name: cartographer-example-registry-creds-sa
+    namespace: tanzu-workload
+  tag: harbor.fbclouddemo.us/tap-packages/example-gitwriter-sc-go-builder
+  stack:
+    name: stack
+    kind: ClusterStack
+  store:
+    name: go-store
+    kind: ClusterStore
+  order:
+    - group:
+        - id: paketo-buildpacks/java
+    - group:
+        - id: paketo-buildpacks/go
