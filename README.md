@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-## Install
+## Set Up
 
 * Install templates
 <pre> 
@@ -14,6 +14,28 @@ kubectl apply -f .
 cd supplychains
 kubectl apply -f .
 </pre>
-* create roles and role bindings 
+* create roles and role bindings
+<pre>
+cd configs
+kubectl apply -f rbac.yaml -n <your-namespace>
+</pre>
+
+
+## Developers flow
+
+### Basic Flow  
+Source (flux) -> Build Image (kpack) -> Deploy APP (deployment, service, HTTPProxy)
+<pre>
+kubectl apply -f configs/workload-deployer.yaml -n <your-namespace>
+</pre>
+
+### Gitops Flow
+Source (flux) -> Build Image (kpack) -> Deploy APP (deployment, service, HTTPProxy) -> Config Provider (configmap) -> Config Writer (flux, gitactions)
+<pre>
+kubectl apply -f configs/workload.yaml -n <your-namespace>
+</pre>
+
+
+
 
 
