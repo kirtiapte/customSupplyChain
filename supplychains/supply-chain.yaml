@@ -1,0 +1,40 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterSupplyChain
+metadata:
+  name: supply-chain-demo
+spec:
+  selector:
+    app.tanzu.vmware.com/workload-type: web-demo
+
+  resources:
+    - name: source-provider
+      templateRef:
+        kind: ClusterSourceTemplate
+        name: source
+
+    - name: image-builder
+      templateRef:
+        kind: ClusterImageTemplate
+        name: image
+      params:
+        - name: image_prefix
+          value: harbor.fbclouddemo.us/tap-packages/example-gitwriter-sc-
+      sources:
+        - name: source
+          resource: source-provider
+
+    - name: config-provider
+      templateRef:
+        kind: ClusterConfigTemplate
+        name: app-config
+      images:
+        - name: image
+          resource: image-builder
+
+    - name: git-writer
+      templateRef:
+        kind: ClusterTemplate
+        name: git-writer
+      configs:
+        - name: data
+          resource: config-provider
